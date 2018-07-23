@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="hariharan.theroboticlabs.com.wirechat.MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/username_label"
+        android:text="@string/username"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:textSize="18sp"/>
+
+    <EditText
+        android:id="@+id/username_input"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/username_label"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
+        android:inputType="textEmailAddress"/>
+
+    <TextView
+        android:id="@+id/password_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/username_label"
+        android:layout_below="@+id/username_input"
+        android:layout_marginTop="40dp"
+        android:text="@string/password"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/password_input"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/username_input"
+        android:layout_below="@+id/password_label"
+        android:inputType="textPassword"/>
+
+    <Button
+        android:id="@+id/signin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/register"
+        android:layout_alignBottom="@+id/register"
+        android:layout_marginEnd="21dp"
+        android:layout_toStartOf="@+id/register"
+        android:text="@string/signin" />
+
+    <Button
+        android:id="@+id/register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/password_input"
+        android:layout_centerVertical="true"
+        android:text="@string/register" />
+
+
+</RelativeLayout>
