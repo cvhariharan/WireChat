@@ -1,5 +1,9 @@
 package hariharan.theroboticlabs.com.wirechat.Fragments;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,9 +17,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import hariharan.theroboticlabs.com.wirechat.R;
+import hariharan.theroboticlabs.com.wirechat.Utils.User;
+import hariharan.theroboticlabs.com.wirechat.Viewmodels.FriendsList;
 
 /**
  * Created by hariharan on 7/21/18.
@@ -26,7 +35,7 @@ public class ChatsList extends Fragment {
     public ArrayList<String> users = new ArrayList<>();
     private ChatsListAdapter adapter;
     private RecyclerView chatsList;
-
+    private FriendsList friendsList;
 
     @Nullable
     @Override
@@ -35,8 +44,17 @@ public class ChatsList extends Fragment {
         chatsList = (RecyclerView) mView.findViewById(R.id.chats_list);
         chatsList.setLayoutManager(new LinearLayoutManager(getActivity()));
         chatsList.setHasFixedSize(true);
-        adapter = new ChatsListAdapter(getActivity(), users);
-        chatsList.setAdapter(adapter);
+
+        friendsList = ViewModelProviders.of(this).get(FriendsList.class);
+        friendsList.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+        friendsList.getFriends().observe(this, new Observer<List<User>>() {
+            @Override
+            public void onChanged(@Nullable List<User> users) {
+                adapter = new ChatsListAdapter(getContext(), users);
+                chatsList.setAdapter(adapter);
+            }
+        });
         return mView;
     }
 
@@ -46,16 +64,16 @@ public class ChatsList extends Fragment {
 
     public void refreshAdapter() {
 //        chatsList.setAdapter(new ChatsListAdapter(users));
-        chatsList.setAdapter(new ChatsListAdapter(getActivity(), users));
+//        chatsList.setAdapter(new ChatsListAdapter(getContext(), users));
     }
 
     class ChatsListAdapter extends RecyclerView.Adapter<ChatsListAdapter.ChatsListViewholder> {
 
         private static final String TAG = "ChatsListAdapter";
-        private ArrayList<String> users;
+        private List<User> users;
         private Context mContext;
 
-        ChatsListAdapter(Context context, ArrayList<String> users) {
+        ChatsListAdapter(Context context, List<User> users) {
             Log.d(TAG, "ChatsListAdapter: Constructor ");
             this.users = users;
             this.mContext = context;
@@ -72,7 +90,7 @@ public class ChatsList extends Fragment {
 
         @Override
         public void onBindViewHolder(ChatsListAdapter.ChatsListViewholder holder, int position) {
-            holder.name.setText(users.get(position));
+            holder.name.setText(users.get(position).getName());
             holder.profilePicture.setImageResource(R.drawable.ic_launcher_background);
 
         }

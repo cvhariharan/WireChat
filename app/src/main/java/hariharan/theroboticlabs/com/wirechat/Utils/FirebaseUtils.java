@@ -36,8 +36,24 @@ public class FirebaseUtils {
         databaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.hasChild(friend.getUid()))
-                    databaseRef.child(uid).child(friend.getUid()).setValue(friend);
+                if(dataSnapshot.hasChild(friend.getUid())) {
+                    //Find the name of the friend
+                    databaseRef.child(friend.getUid()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String fName = dataSnapshot.child("name").getValue().toString();
+                            Log.d(TAG, "onDataChange: "+fName);
+                            databaseRef.child(uid).child(friend.getUid())
+                                    .setValue(new User(fName, friend.getUid()));
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                }
             }
 
             @Override
@@ -45,6 +61,10 @@ public class FirebaseUtils {
 
             }
         });
+    }
+
+    public DatabaseReference getDatabaseRef() {
+        return databaseRef;
     }
 
 //    public boolean checkUid(final String uid) {

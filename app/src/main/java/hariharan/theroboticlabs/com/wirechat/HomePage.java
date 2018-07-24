@@ -43,11 +43,11 @@ public class HomePage extends AppCompatActivity {
         setContentView(R.layout.activity_home_page);
 
         chatsList = new ChatsList();
-            chatsList.add("John Doe");
-            chatsList.add("uayfi aofih");
-            chatsList.add("HOia oalkfj");
-            chatsList.add("haius afjl");
-            chatsList.add("Joasjf hafkl");
+//            chatsList.add("John Doe");
+//            chatsList.add("uayfi aofih");
+//            chatsList.add("HOia oalkfj");
+//            chatsList.add("haius afjl");
+//            chatsList.add("Joasjf hafkl");
 
         sectionsPageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
         sectionsPageAdapter.add(chatsList, "Home");
