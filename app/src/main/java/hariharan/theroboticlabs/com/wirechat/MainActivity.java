@@ -20,18 +20,21 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import hariharan.theroboticlabs.com.wirechat.Fragments.ScanAndShare;
+import hariharan.theroboticlabs.com.wirechat.Utils.FirebaseUtils;
 
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private EditText username;
     private EditText password;
+    private FirebaseUtils firebaseUtils;
 
     private static final String TAG = "MainActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        firebaseUtils = new FirebaseUtils();
 
         if(!checkCameraPermission())
             requestPermission();
@@ -92,31 +95,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void signUp() {
-        String email = username.getText().toString();
-        String passw = password.getText().toString();
-
-        mAuth.createUserWithEmailAndPassword(email, passw)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            //Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(MainActivity.this, "Welcome",
-                                    Toast.LENGTH_LONG).show();
-                            openChatListPage();
-
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            //Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-
-                        // ...
-                    }
-                });
+//        String email = username.getText().toString();
+//        String passw = password.getText().toString();
+//
+//        mAuth.createUserWithEmailAndPassword(email, passw)
+//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        if (task.isSuccessful()) {
+//                            // Sign in success, update UI with the signed-in user's information
+//                            //Log.d(TAG, "signInWithEmail:success");
+//                            FirebaseUser user = mAuth.getCurrentUser();
+//                            Toast.makeText(MainActivity.this, "Welcome",
+//                                    Toast.LENGTH_LONG).show();
+//                            firebaseUtils.addUser(user.getUid());
+//                            openChatListPage();
+//
+//                        } else {
+//                            // If sign in fails, display a message to the user.
+//                            //Log.w(TAG, "signInWithEmail:failure", task.getException());
+//                            Toast.makeText(MainActivity.this, "Authentication failed.",
+//                                    Toast.LENGTH_SHORT).show();
+//                        }
+//
+//                        // ...
+//                    }
+//                });
+        Intent intent = new Intent(this, RegisterActivity.class);
+        startActivity(intent);
     }
 
     private void openChatListPage() {

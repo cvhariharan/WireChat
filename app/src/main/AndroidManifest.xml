@@ -23,7 +23,8 @@
             android:name=".HomePage"
             android:label="@string/title_activity_home_page"
             android:theme="@style/AppTheme" />
-        <activity android:name=".Scan"></activity>
+        <activity android:name=".Scan" />
+        <activity android:name=".RegisterActivity"></activity>
     </application>
 
 </manifest>
