@@ -67,6 +67,11 @@ public class FirebaseUtils {
         return databaseRef;
     }
 
+    public void sendMessage(String from, String to, String message) {
+        ChatMessage chatMessage = new ChatMessage(message, from, to);
+        databaseRef.child(from).child(to).push().setValue(chatMessage);
+    }
+
 //    public boolean checkUid(final String uid) {
 //        databaseRef.addValueEventListener(new ValueEventListener() {
 //            @Override

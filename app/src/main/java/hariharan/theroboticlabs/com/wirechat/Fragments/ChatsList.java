@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.List;
 
+import hariharan.theroboticlabs.com.wirechat.ChatActivity;
 import hariharan.theroboticlabs.com.wirechat.R;
 import hariharan.theroboticlabs.com.wirechat.Utils.User;
 import hariharan.theroboticlabs.com.wirechat.Viewmodels.FriendsList;
@@ -46,6 +49,7 @@ public class ChatsList extends Fragment {
         chatsList.setHasFixedSize(true);
 
         friendsList = ViewModelProviders.of(this).get(FriendsList.class);
+        //Get the current users friends list
         friendsList.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         friendsList.getFriends().observe(this, new Observer<List<User>>() {
@@ -89,10 +93,20 @@ public class ChatsList extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(ChatsListAdapter.ChatsListViewholder holder, int position) {
+        public void onBindViewHolder(final ChatsListAdapter.ChatsListViewholder holder, int position) {
             holder.name.setText(users.get(position).getName());
             holder.profilePicture.setImageResource(R.drawable.ic_launcher_background);
-
+            holder.setUid(users.get(position).getUid());
+            holder.setUserName(users.get(position).getName());
+            holder.mParent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent openChat = new Intent(getActivity(), ChatActivity.class);
+                    openChat.putExtra("TO_UID", holder.getUid());
+                    openChat.putExtra("TO_NAME", holder.getUserName());
+                    startActivity(openChat);
+                }
+            });
         }
 
         @Override
@@ -103,12 +117,33 @@ public class ChatsList extends Fragment {
         class ChatsListViewholder extends RecyclerView.ViewHolder {
             public TextView name;
             public ImageView profilePicture;
+            public LinearLayout mParent;
+            private String uid;
+            private String userName;
+
+            public String getUserName() {
+                return userName;
+            }
+
+            public void setUserName(String userName) {
+                this.userName = userName;
+            }
+
+            public String getUid() {
+                return uid;
+            }
+
+            public void setUid(String uid) {
+                this.uid = uid;
+            }
 
             public ChatsListViewholder(View itemView) {
                 super(itemView);
                 name = itemView.findViewById(R.id.name);
                 profilePicture = itemView.findViewById(R.id.profile_picture);
+                mParent = itemView.findViewById(R.id.linear_layout);
             }
+
         }
     }
 
