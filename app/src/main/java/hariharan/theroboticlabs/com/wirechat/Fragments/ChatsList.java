@@ -35,6 +35,7 @@ import hariharan.theroboticlabs.com.wirechat.Viewmodels.FriendsList;
 
 public class ChatsList extends Fragment {
 
+    private static final String TAG = "ChatsList";
     public ArrayList<String> users = new ArrayList<>();
     private ChatsListAdapter adapter;
     private RecyclerView chatsList;
@@ -47,14 +48,17 @@ public class ChatsList extends Fragment {
         chatsList = (RecyclerView) mView.findViewById(R.id.chats_list);
         chatsList.setLayoutManager(new LinearLayoutManager(getActivity()));
         chatsList.setHasFixedSize(true);
+        chatsList.setAdapter(new ChatsListAdapter(getContext(), new ArrayList<User>()));
 
         friendsList = ViewModelProviders.of(this).get(FriendsList.class);
         //Get the current users friends list
         friendsList.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
+
         friendsList.getFriends().observe(this, new Observer<List<User>>() {
             @Override
             public void onChanged(@Nullable List<User> users) {
+                Log.d(TAG, "onChanged: Got new users");
                 adapter = new ChatsListAdapter(getContext(), users);
                 chatsList.setAdapter(adapter);
             }

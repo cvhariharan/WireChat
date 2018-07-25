@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import hariharan.theroboticlabs.com.wirechat.Utils.FirebaseUtils;
 import hariharan.theroboticlabs.com.wirechat.Utils.User;
@@ -62,6 +63,12 @@ public class RegisterActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             //Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+
+                            //Set name as display name
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(name).build();
+                            user.updateProfile(profileUpdates);
+
                             Toast.makeText(RegisterActivity.this, "Welcome",
                                     Toast.LENGTH_LONG).show();
                             firebaseUtils.addUser(new User(name, user.getUid()));

@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.Inflater;
 
@@ -50,16 +51,7 @@ public class ChatActivity extends AppCompatActivity {
         chatRecycler = (RecyclerView) findViewById(R.id.chat_recycler);
         chatRecycler.setHasFixedSize(true);
         chatRecycler.setLayoutManager(new LinearLayoutManager(this));
-
-        Button sendButton = (Button) findViewById(R.id.send_button);
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String message = messageField.getText().toString();
-                if(!TextUtils.isEmpty(message))
-                    sendMessage(message);
-            }
-        });
+        chatRecycler.setAdapter(new ChatRecycler(new ArrayList<ChatMessage>()));
 
         chatViewModel = ViewModelProviders.of(this).get(ChatViewModel.class);
         chatViewModel.setChatPair(FirebaseAuth.getInstance().getCurrentUser().getUid(),
@@ -72,12 +64,24 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        Button sendButton = (Button) findViewById(R.id.send_button);
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String message = messageField.getText().toString();
+                if(!TextUtils.isEmpty(message))
+                    chatViewModel.sendMessage(FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                            toUid, message);
+            }
+        });
+
+
     }
 
-    private void sendMessage(String message) {
-        firebaseUtils.sendMessage(FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                toUid, message);
-    }
+//    private void sendMessage(String message) {
+//        firebaseUtils.sendMessage(FirebaseAuth.getInstance().getCurrentUser().getUid(),
+//                toUid, message);
+//    }
 
     class ChatRecycler extends RecyclerView.Adapter<ChatRecycler.ChatViewHolder>{
 
@@ -102,6 +106,7 @@ public class ChatActivity extends AppCompatActivity {
             if(holder.from.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                 //Left align messages received and right align messages sent
                 holder.messageView.setGravity(Gravity.RIGHT);
+                holder.messageView.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
             }
         }
 

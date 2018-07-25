@@ -45,6 +45,11 @@ public class FirebaseUtils {
                             Log.d(TAG, "onDataChange: "+fName);
                             databaseRef.child(uid).child(friend.getUid())
                                     .setValue(new User(fName, friend.getUid()));
+                            User u = new User(
+                                    FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
+                                    FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            databaseRef.child(friend.getUid()).child(uid).setValue(u);
+                            Log.d(TAG, "onDataChange: "+u.toString());
                         }
 
                         @Override
@@ -70,6 +75,7 @@ public class FirebaseUtils {
     public void sendMessage(String from, String to, String message) {
         ChatMessage chatMessage = new ChatMessage(message, from, to);
         databaseRef.child(from).child(to).push().setValue(chatMessage);
+        databaseRef.child(to).child(from).push().setValue(chatMessage);
     }
 
 //    public boolean checkUid(final String uid) {
