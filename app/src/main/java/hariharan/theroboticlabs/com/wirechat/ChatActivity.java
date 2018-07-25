@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -52,6 +53,7 @@ public class ChatActivity extends AppCompatActivity {
         chatRecycler.setHasFixedSize(true);
         chatRecycler.setLayoutManager(new LinearLayoutManager(this));
         chatRecycler.setAdapter(new ChatRecycler(new ArrayList<ChatMessage>()));
+        chatRecycler.setItemAnimator(new DefaultItemAnimator());
 
         chatViewModel = ViewModelProviders.of(this).get(ChatViewModel.class);
         chatViewModel.setChatPair(FirebaseAuth.getInstance().getCurrentUser().getUid(),
