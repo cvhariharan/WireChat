@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,6 +36,8 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView chatRecycler;
     private String toUid, toName;
     private ChatViewModel chatViewModel;
+    private int SENT_TYPE = 1;
+    private int RECEIVED_TYPE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,38 +80,60 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
 //    private void sendMessage(String message) {
 //        firebaseUtils.sendMessage(FirebaseAuth.getInstance().getCurrentUser().getUid(),
 //                toUid, message);
 //    }
-
-    class ChatRecycler extends RecyclerView.Adapter<ChatRecycler.ChatViewHolder>{
+    //TODO separate chat bubbles for sent and received messages
+    //TODO auto-scroll to the new message
+    //TODO adjust the size of widgets
+    class ChatRecycler extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
         private List<ChatMessage> allMessages;
         public ChatRecycler(List<ChatMessage> messages) {
             this.allMessages = messages;
         }
 
-        @Override
-        public ChatViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View mView = LayoutInflater.from(ChatActivity.this).inflate(R.layout.chat_bubble, parent, false);
-            ChatViewHolder viewHolder = new ChatViewHolder(mView);
-            return viewHolder;
+    @Override
+    public int getItemViewType(int position) {
+        if(allMessages.get(position).getFrom().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))
+            return SENT_TYPE;
+        else
+            return RECEIVED_TYPE;
+    }
+
+    @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View mView;
+            if(viewType == SENT_TYPE) {
+                mView = LayoutInflater.from(ChatActivity.this).inflate(R.layout.sent_chat_bubble, parent, false);
+                return new ChatViewHolderSent(mView);
+            }
+            else {
+                mView = LayoutInflater.from(ChatActivity.this).inflate(R.layout.received_chat_bubble, parent, false);
+                return new ChatViewHolderRecv(mView);
+            }
+
         }
 
+
         @Override
-        public void onBindViewHolder(ChatViewHolder holder, int position) {
-            holder.message = allMessages.get(position).getMessage();
-            holder.from = allMessages.get(position).getFrom();
-            holder.to = allMessages.get(position).getTo();
-            holder.messageView.setText(holder.message);
-            if(holder.from.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                //Left align messages received and right align messages sent
-                holder.messageView.setGravity(Gravity.RIGHT);
-                holder.messageView.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            if(holder.getItemViewType() == SENT_TYPE) {
+                ChatViewHolderSent sentHolder = (ChatViewHolderSent) holder;
+                sentHolder.message = allMessages.get(position).getMessage();
+                sentHolder.from = allMessages.get(position).getFrom();
+                sentHolder.to = allMessages.get(position).getTo();
+                sentHolder.messageView.setText(sentHolder.message);
+            }
+            else {
+                ChatViewHolderRecv recvHolder = (ChatViewHolderRecv) holder;
+                recvHolder.message = allMessages.get(position).getMessage();
+                recvHolder.from = allMessages.get(position).getFrom();
+                recvHolder.to = allMessages.get(position).getTo();
+                recvHolder.messageView.setText(recvHolder.message);
             }
         }
 
@@ -117,10 +142,19 @@ public class ChatActivity extends AppCompatActivity {
             return allMessages.size();
         }
 
-        class ChatViewHolder extends RecyclerView.ViewHolder {
+        class ChatViewHolderSent extends RecyclerView.ViewHolder {
             public String from, to, message;
             public TextView messageView;
-            public ChatViewHolder(View itemView) {
+            public ChatViewHolderSent(View itemView) {
+                super(itemView);
+                messageView = itemView.findViewById(R.id.chat);
+            }
+        }
+
+        class ChatViewHolderRecv extends RecyclerView.ViewHolder {
+            public String from, to, message;
+            public TextView messageView;
+            public ChatViewHolderRecv(View itemView) {
                 super(itemView);
                 messageView = itemView.findViewById(R.id.chat);
             }
