@@ -12,4 +12,5 @@
     <string name="register_password">Password</string>
     <string name="chat_button">Send</string>
     <string name="test_string">Lorem ipsum yougo sol tat mifogih.</string>
+    <string name="message_input">Send message</string>
 </resources>

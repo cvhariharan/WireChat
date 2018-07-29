@@ -26,6 +26,13 @@
         <activity android:name=".Scan" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".ChatActivity"></activity>
+        <service
+            android:exported="false"
+            android:name=".Jobs.SyncJob">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

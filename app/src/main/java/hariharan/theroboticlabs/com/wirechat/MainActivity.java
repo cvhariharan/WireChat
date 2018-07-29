@@ -13,13 +13,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.firebase.jobdispatcher.Constraint;
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+import com.firebase.jobdispatcher.Job;
+import com.firebase.jobdispatcher.Lifetime;
+import com.firebase.jobdispatcher.Trigger;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 import hariharan.theroboticlabs.com.wirechat.Fragments.ScanAndShare;
+import hariharan.theroboticlabs.com.wirechat.Jobs.SyncJob;
 import hariharan.theroboticlabs.com.wirechat.Utils.FirebaseUtils;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         firebaseUtils = new FirebaseUtils();
 
         if(!checkCameraPermission())
@@ -64,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
                 signUp();
             }
         });
+
+        setUpSyncJob();
     }
 
     private void signIn() {
@@ -92,6 +103,21 @@ public class MainActivity extends AppCompatActivity {
                         // ...
                     }
                 });
+    }
+
+    private void setUpSyncJob() {
+        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
+
+        Job sync = dispatcher.newJobBuilder()
+                .setService(SyncJob.class) // the JobService that will be called
+                .setTag("sync")        // uniquely identifies the job
+                .setRecurring(true)
+                .setLifetime(Lifetime.FOREVER)
+                .setConstraints(Constraint.ON_ANY_NETWORK)
+                .setTrigger(Trigger.executionWindow(0, 60))
+                .build();
+
+        dispatcher.mustSchedule(sync);
     }
 
     private void signUp() {

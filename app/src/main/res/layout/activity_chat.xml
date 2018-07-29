@@ -18,29 +18,63 @@
             android:text="Test String"
             android:layout_gravity="center"
             android:id="@+id/talking_to"/>
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/chat_recycler"
-        android:layout_weight="65">
 
-    </android.support.v7.widget.RecyclerView>
-        <LinearLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/chat_recycler"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:orientation="horizontal">
-        <EditText
-            android:layout_width="300dp"
+            android:layout_height="492dp"
+            android:layout_weight="80">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <LinearLayout
+            android:id="@+id/chatControls"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/message_window"
-            android:layout_marginBottom="10dp"
-            />
-            <Button
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/message_window"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="0.8"
+                android:hint="@string/message_input"
+                android:inputType="textMultiLine" />
+
+            <ImageButton
                 android:id="@+id/send_button"
-                android:text="@string/chat_button"/>
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_menu_send" />
+
         </LinearLayout>
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:layout_weight="20"-->
+            <!--android:weightSum="100">-->
+
+            <!--<EditText-->
+                <!--android:id="@+id/message_window"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:padding="10dp"-->
+                <!--android:hint="@string/message_input"-->
+                <!--android:layout_weight="75"/>-->
+
+            <!--<Button-->
+                <!--android:id="@+id/send_button"-->
+                <!--android:layout_width="70dp"-->
+                <!--android:layout_height="50dp"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:background="@mipmap/send"-->
+                <!--android:layout_weight="25"/>-->
+        <!--</LinearLayout>-->
     </LinearLayout>
 </RelativeLayout>

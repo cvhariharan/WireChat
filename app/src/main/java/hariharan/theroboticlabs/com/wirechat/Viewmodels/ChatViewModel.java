@@ -2,6 +2,7 @@ package hariharan.theroboticlabs.com.wirechat.Viewmodels;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -21,6 +22,7 @@ import hariharan.theroboticlabs.com.wirechat.Utils.FirebaseUtils;
 
 public class ChatViewModel extends ViewModel{
 
+    private static final String TAG = "ChatViewModel";
     private DatabaseReference databaseRef;
     private FirebaseUtils firebaseUtils;
     private String uid, fuid;
@@ -28,6 +30,7 @@ public class ChatViewModel extends ViewModel{
     private MutableLiveData<List<ChatMessage>> messagesLiveData;
 
     public ChatViewModel() {
+        Log.d(TAG, "ChatViewModel: Created");
         allMessages = new ArrayList<>();
         messagesLiveData = new MutableLiveData<>();
         firebaseUtils = new FirebaseUtils();
@@ -77,7 +80,9 @@ public class ChatViewModel extends ViewModel{
     }
 
     public void sendMessage(String from, String to, String message) {
+
         firebaseUtils.sendMessage(from,
                 to, message);
+        Log.d(TAG, "sendMessage: Sent");
     }
 }

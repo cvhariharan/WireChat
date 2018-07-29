@@ -74,7 +74,15 @@ public class FirebaseUtils {
 
     public void sendMessage(String from, String to, String message) {
         ChatMessage chatMessage = new ChatMessage(message, from, to);
-        databaseRef.child(from).child(to).push().setValue(chatMessage);
+        Log.d(TAG, "sendMessage: to:"+to+" from:"+from);
+        databaseRef.child(from).child(to).push().setValue(chatMessage, new DatabaseReference.CompletionListener() {
+
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if(databaseError != null)
+                    Log.d(TAG, "onComplete: "+databaseError.getMessage());
+            }
+        });
         databaseRef.child(to).child(from).push().setValue(chatMessage);
     }
 
