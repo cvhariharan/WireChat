@@ -10,6 +10,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,8 @@ import hariharan.theroboticlabs.com.wirechat.Utils.FirebaseUtils;
 
 public class ChatViewModel extends ViewModel{
 
+    private KeyStore keyStore;
+    private String alias;
     private static final String TAG = "ChatViewModel";
     private DatabaseReference databaseRef;
     private FirebaseUtils firebaseUtils;
@@ -31,6 +34,15 @@ public class ChatViewModel extends ViewModel{
 
     public ChatViewModel() {
         Log.d(TAG, "ChatViewModel: Created");
+        try {
+            keyStore = KeyStore.getInstance("AndroidKeyStore");
+            alias = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
         allMessages = new ArrayList<>();
         messagesLiveData = new MutableLiveData<>();
         firebaseUtils = new FirebaseUtils();

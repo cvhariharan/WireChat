@@ -1,5 +1,7 @@
 package hariharan.theroboticlabs.com.wirechat;
 
+import android.*;
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -28,22 +30,20 @@ import com.google.firebase.database.FirebaseDatabase;
 import hariharan.theroboticlabs.com.wirechat.Jobs.SyncJob;
 import hariharan.theroboticlabs.com.wirechat.Utils.FirebaseUtils;
 
-public class MainActivity extends AppCompatActivity {
+public class SigninActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private EditText username;
     private EditText password;
     private FirebaseUtils firebaseUtils;
 
-    public static boolean PERSIST = false;
 
-    private static final String TAG = "MainActivity";
+
+    private static final String TAG = "SigninActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-        PERSIST = true;
         firebaseUtils = new FirebaseUtils();
 
         if(!checkCameraPermission())
@@ -74,8 +74,6 @@ public class MainActivity extends AppCompatActivity {
                 signUp();
             }
         });
-
-        setUpSyncJob();
     }
 
     private void signIn() {
@@ -90,14 +88,14 @@ public class MainActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(MainActivity.this, "Welcome",
+                            Toast.makeText(SigninActivity.this, "Welcome",
                                     Toast.LENGTH_LONG).show();
                             openChatListPage();
 
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                            Toast.makeText(SigninActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
 
@@ -106,48 +104,8 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private void setUpSyncJob() {
-        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
-
-        Job sync = dispatcher.newJobBuilder()
-                .setService(SyncJob.class) // the JobService that will be called
-                .setTag("sync")        // uniquely identifies the job
-                .setRecurring(true)
-                .setLifetime(Lifetime.FOREVER)
-                .setConstraints(Constraint.ON_ANY_NETWORK)
-                .setTrigger(Trigger.executionWindow(0, 60))
-                .build();
-
-        dispatcher.mustSchedule(sync);
-    }
 
     private void signUp() {
-//        String email = username.getText().toString();
-//        String passw = password.getText().toString();
-//
-//        mAuth.createUserWithEmailAndPassword(email, passw)
-//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        if (task.isSuccessful()) {
-//                            // Sign in success, update UI with the signed-in user's information
-//                            //Log.d(TAG, "signInWithEmail:success");
-//                            FirebaseUser user = mAuth.getCurrentUser();
-//                            Toast.makeText(MainActivity.this, "Welcome",
-//                                    Toast.LENGTH_LONG).show();
-//                            firebaseUtils.addUser(user.getUid());
-//                            openChatListPage();
-//
-//                        } else {
-//                            // If sign in fails, display a message to the user.
-//                            //Log.w(TAG, "signInWithEmail:failure", task.getException());
-//                            Toast.makeText(MainActivity.this, "Authentication failed.",
-//                                    Toast.LENGTH_SHORT).show();
-//                        }
-//
-//                        // ...
-//                    }
-//                });
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
     }
@@ -170,7 +128,8 @@ public class MainActivity extends AppCompatActivity {
     private void requestPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             this.requestPermissions(
-                    new String[]{android.Manifest.permission.CAMERA},
+                    new String[]{android.Manifest.permission.CAMERA,
+                                 android.Manifest.permission.READ_PHONE_STATE},
                     10);
         }
     }
