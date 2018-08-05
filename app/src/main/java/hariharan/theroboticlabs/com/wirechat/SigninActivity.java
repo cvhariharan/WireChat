@@ -1,6 +1,5 @@
 package hariharan.theroboticlabs.com.wirechat;
 
-import android.*;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -26,7 +25,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
-import hariharan.theroboticlabs.com.wirechat.Fragments.ScanAndShare;
 import hariharan.theroboticlabs.com.wirechat.Jobs.SyncJob;
 import hariharan.theroboticlabs.com.wirechat.Utils.FirebaseUtils;
 
@@ -37,12 +35,15 @@ public class MainActivity extends AppCompatActivity {
     private EditText password;
     private FirebaseUtils firebaseUtils;
 
+    public static boolean PERSIST = false;
+
     private static final String TAG = "MainActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        PERSIST = true;
         firebaseUtils = new FirebaseUtils();
 
         if(!checkCameraPermission())

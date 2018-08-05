@@ -1,6 +1,7 @@
 package hariharan.theroboticlabs.com.wirechat;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -40,15 +41,21 @@ import hariharan.theroboticlabs.com.wirechat.Fragments.ChatsList;
 import hariharan.theroboticlabs.com.wirechat.Fragments.ScanAndShare;
 import hariharan.theroboticlabs.com.wirechat.Jobs.SyncJob;
 
-public class HomePage extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "HomePage";
+    private static final String TAG = "MainActivity";
     private SectionsPageAdapter sectionsPageAdapter;
     public ArrayList<String> users = new ArrayList<>();
     private ChatsList chatsList;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Check if the user has signed in and appropriately route to signinactivity.
+        if(FirebaseAuth.getInstance().getCurrentUser() == null) {
+            Log.d(TAG, "onCreate: SignIn");
+            openSigninActivity();
+        }
         setContentView(R.layout.activity_home_page);
 
         chatsList = new ChatsList();
@@ -68,50 +75,26 @@ public class HomePage extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_home_page, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.logout :
+                FirebaseAuth.getInstance().signOut();
+                openSigninActivity();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-//    class ChatsListAdapter extends RecyclerView.Adapter<ChatsListAdapter.ChatsListViewholder> {
-//
-//        private static final String TAG = "ChatsListAdapter";
-//        public ArrayList<String> users;
-//        private Context mContext;
-//
-//        ChatsListAdapter(Context context, ArrayList<String> users) {
-//            Log.d(TAG, "ChatsListAdapter: Constructor ");
-//            this.users = users;
-//            this.mContext = context;
-//            Log.d(TAG, "t"+users.size());
-//        }
-//
-//        @Override
-//        public ChatsListAdapter.ChatsListViewholder onCreateViewHolder(ViewGroup parent, int viewType) {
-//            View view = LayoutInflater.from(mContext).inflate(R.layout.chat_head, parent, false);
-//            ChatsListAdapter.ChatsListViewholder chatsListViewholder = new ChatsListAdapter.ChatsListViewholder(view);
-//            //Toast.makeText(mContext, ""+users.size(), Toast.LENGTH_SHORT).show();
-//            return chatsListViewholder;
-//        }
-//
-//        @Override
-//        public void onBindViewHolder(ChatsListAdapter.ChatsListViewholder holder, int position) {
-//            holder.name.setText(users.get(position));
-//            holder.profilePicture.setImageResource(R.drawable.ic_launcher_background);
-//
-//        }
-//
-//        @Override
-//        public int getItemCount() {
-//            return users.size();
-//        }
-//
-//        class ChatsListViewholder extends RecyclerView.ViewHolder {
-//            public TextView name;
-//            public ImageView profilePicture;
-//
-//            public ChatsListViewholder(View itemView) {
-//                super(itemView);
-//                name = itemView.findViewById(R.id.name);
-//                profilePicture = itemView.findViewById(R.id.profile_picture);
-//            }
-//        }
-//    }
+    public void openSigninActivity() {
+        Intent i = new Intent(this, SigninActivity.class);
+        startActivity(i);
+        Log.d(TAG, "openSigninActivity: ");
+    }
 }
