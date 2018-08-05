@@ -1,5 +1,5 @@
 # Wire Chat
-### An open-source, privacy focussed chat app. 
+### An open-source, privacy focused chat app. 
 
 ## Features
 * You can control who can talk to you and who has your contact details.
