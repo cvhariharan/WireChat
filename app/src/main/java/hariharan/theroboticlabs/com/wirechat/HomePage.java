@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import hariharan.theroboticlabs.com.wirechat.Fragments.ChatsList;
 import hariharan.theroboticlabs.com.wirechat.Fragments.ScanAndShare;
+import hariharan.theroboticlabs.com.wirechat.Utils.FirebaseUtils;
 
 public class HomePage extends AppCompatActivity {
 
@@ -56,7 +57,7 @@ public class HomePage extends AppCompatActivity {
     }
 
     public void openSigninActivity() {
-        Intent i = new Intent(this, SigninActivity.class);
+        Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
         Log.d(TAG, "openSigninActivity: ");
     }

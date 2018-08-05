@@ -30,7 +30,7 @@ public class FriendsList extends ViewModel{
     private List<User> users;
 
     public FriendsList() {
-        databaseRef = new FirebaseUtils().getDatabaseRef();
+        databaseRef = FirebaseUtils.getDatabaseRef();
         allUsers = new MutableLiveData<>();
         users = new ArrayList<>();
 

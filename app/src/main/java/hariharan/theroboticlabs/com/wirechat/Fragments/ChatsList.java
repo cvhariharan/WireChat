@@ -66,15 +66,6 @@ public class ChatsList extends Fragment {
         return mView;
     }
 
-    public void add(String name) {
-        users.add(name);
-    }
-
-    public void refreshAdapter() {
-//        chatsList.setAdapter(new ChatsListAdapter(users));
-//        chatsList.setAdapter(new ChatsListAdapter(getContext(), users));
-    }
-
     class ChatsListAdapter extends RecyclerView.Adapter<ChatsListAdapter.ChatsListViewholder> {
 
         private static final String TAG = "ChatsListAdapter";
@@ -99,7 +90,7 @@ public class ChatsList extends Fragment {
         @Override
         public void onBindViewHolder(final ChatsListAdapter.ChatsListViewholder holder, int position) {
             holder.name.setText(users.get(position).getName());
-            holder.profilePicture.setImageResource(R.drawable.ic_launcher_background);
+            holder.profilePicture.setImageResource(R.mipmap.profile);
             holder.setUid(users.get(position).getUid());
             holder.setUserName(users.get(position).getName());
             holder.mParent.setOnClickListener(new View.OnClickListener() {

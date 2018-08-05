@@ -18,13 +18,13 @@ import com.google.firebase.database.ValueEventListener;
 public class FirebaseUtils {
     private static final String TAG = "FirebaseUtils";
     boolean exists;
-    FirebaseDatabase database;
-    DatabaseReference databaseRef;
+    static FirebaseDatabase database = FirebaseDatabase.getInstance();
+    static DatabaseReference databaseRef = database.getReference("users");
 
-    public FirebaseUtils() {
-        database = FirebaseDatabase.getInstance();
-        databaseRef = database.getReference("users");
-    }
+//    public FirebaseUtils() {
+//        database = FirebaseDatabase.getInstance();
+//        databaseRef = database.getReference("users");
+//    }
 
     public void addUser(User user) {
         databaseRef.child(user.getUid()).child("joined_at").setValue(ServerValue.TIMESTAMP);
@@ -68,7 +68,7 @@ public class FirebaseUtils {
         });
     }
 
-    public DatabaseReference getDatabaseRef() {
+    public static DatabaseReference getDatabaseRef() {
         return databaseRef;
     }
 

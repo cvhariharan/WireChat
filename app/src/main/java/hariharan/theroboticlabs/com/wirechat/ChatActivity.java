@@ -3,6 +3,7 @@ package hariharan.theroboticlabs.com.wirechat;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.security.KeyPairGeneratorSpec;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +24,9 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.Inflater;
@@ -34,7 +38,7 @@ import hariharan.theroboticlabs.com.wirechat.Viewmodels.ChatViewModel;
 public class ChatActivity extends AppCompatActivity {
 
     private static final String TAG = "ChatActivity";
-    private FirebaseUtils firebaseUtils;
+
     private EditText messageField;
     private RecyclerView chatRecycler;
     private String toUid, toName;
@@ -47,10 +51,12 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        Log.d(TAG, "ChatViewModel: Created");
+
+
         toUid = getIntent().getStringExtra("TO_UID");
         toName = getIntent().getStringExtra("TO_NAME");
 
-        firebaseUtils = new FirebaseUtils();
         TextView talkingTo = (TextView) findViewById(R.id.talking_to);
         talkingTo.setText(toName);
 

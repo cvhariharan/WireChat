@@ -1,6 +1,7 @@
 package hariharan.theroboticlabs.com.wirechat;
 
 import android.content.Intent;
+import android.security.KeyPairGeneratorSpec;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +18,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.KeyStore;
 
 import hariharan.theroboticlabs.com.wirechat.Utils.FirebaseUtils;
 import hariharan.theroboticlabs.com.wirechat.Utils.User;
@@ -72,7 +77,11 @@ public class RegisterActivity extends AppCompatActivity {
                             Toast.makeText(RegisterActivity.this, "Welcome",
                                     Toast.LENGTH_LONG).show();
                             firebaseUtils.addUser(new User(name, user.getUid()));
+
+
                             Intent intent = new Intent(RegisterActivity.this, HomePage.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
 
 
